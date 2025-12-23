@@ -1,339 +1,185 @@
-📈 Production Trend Analysis Using Polynomial Regression
+# 📈 Production Trend Analysis Using Polynomial Regression
 
-This project analyzes long-term production trends using Polynomial Regression (degree 3) and applies the model to support warehouse capacity planning decisions.
-The analysis is implemented in Python using scikit-learn, pandas, and matplotlib.
+This project analyzes long-term **production trends** using **Polynomial Regression (degree 3)** and applies the model to support **warehouse capacity planning decisions**.  
+The analysis is implemented in **Python** using `pandas`, `numpy`, `matplotlib`, and `scikit-learn`.
 
-📌 Project Overview
+---
 
-Understanding production growth trends is essential for operational planning, especially when production capacity constraints such as warehouse storage limits exist.
-This project models monthly production data over multiple years and estimates when production will exceed a predefined maximum warehouse capacity, enabling proactive infrastructure planning.
+## 📌 Project Overview
 
-Key Objectives
+Understanding production growth trends is critical for operational and infrastructure planning.  
+This project models monthly production data over multiple years and estimates **when production will exceed a maximum warehouse capacity**, enabling proactive decision-making.
 
-Model historical production data using Polynomial Regression
+### Key Objectives
+- Analyze historical production data
+- Model non-linear growth using polynomial regression
+- Evaluate model performance using MAE and RMSE
+- Forecast future production trends
+- Determine the latest safe time to start building a new warehouse
 
-Evaluate model accuracy using MAE and RMSE
+---
 
-Forecast future production trends
+## 📊 Dataset Description
 
-Determine the latest safe time to start building a new warehouse based on capacity constraints
+- Monthly production data starting from **January 2018**
+- Total observations: **144 months**
+- Each data point represents production volume for a given month
 
-🧠 Methodology
-1. Dataset Description
+The dataset is indexed using a **monthly datetime range**, allowing time-based visualization and analysis.
 
-Monthly production data from January 2018 onward
+---
 
-Total observations: 144 months
+## 🧠 Methodology
 
-Each data point represents production volume for a given month
+### 1. Feature Engineering
 
-The dataset is indexed using a monthly datetime range, allowing time-based visualization and analysis.
+- **Independent Variable (X):**  
+  Sequential month index  
+X = {0, 1, 2, ..., 143}
 
-2. Feature Engineering
+markdown
+Copy code
 
-Independent variable (X):
-Sequential month index
-
-𝑋
-=
-{
-0
-,
-1
-,
-2
-,
-…
-,
-143
-}
-X={0,1,2,…,143}
-
-Dependent variable (y):
+- **Dependent Variable (y):**  
 Monthly production values
 
-Polynomial feature expansion is applied to capture non-linear growth patterns:
+Polynomial feature expansion is applied to capture non-linear trends:
+[1, x, x², x³]
 
-𝑋
-𝑝
-𝑜
-𝑙
-𝑦
-=
-[
-1
-,
-𝑥
-,
-𝑥
-2
-,
-𝑥
-3
-]
-X
-poly
-	​
+yaml
+Copy code
 
-=[1,x,x
-2
-,x
-3
-]
-3. Polynomial Regression Model
+---
 
-A degree-3 polynomial regression is fitted using linear least squares:
+### 2. Polynomial Regression Model
 
-𝑦
-=
-𝛽
-0
-+
-𝛽
-1
-𝑥
-+
-𝛽
-2
-𝑥
-2
-+
-𝛽
-3
-𝑥
-3
-y=β
-0
-	​
+A **degree-3 polynomial regression** model is fitted using linear regression:
 
-+β
-1
-	​
+y = β₀ + β₁x + β₂x² + β₃x³
 
-x+β
-2
-	​
+yaml
+Copy code
 
-x
-2
-+β
-3
-	​
+**Reason for choosing degree 3:**
+- Captures accelerating growth trends
+- Avoids excessive overfitting
+- Remains interpretable for business and operations planning
 
-x
-3
+---
 
-This degree was chosen to:
+### 3. Taylor Series Interpretation
 
-Capture accelerating growth trends
+Because the model is a third-degree polynomial, its **Taylor series expansion around x = 0** is mathematically identical to the regression model itself.  
+This provides a smooth analytical approximation of production growth over time.
 
-Avoid excessive overfitting
+---
 
-Maintain interpretability for business decision-making
+## 📈 Visualization
 
-4. Taylor Series Interpretation
+The model outputs:
+- Actual production values
+- Polynomial regression predictions
+- Trend comparison over time
 
-Since the regression model itself is a third-degree polynomial, its Taylor series expansion around 
-𝑥
-=
-0
-x=0 is mathematically identical to the fitted model.
-This provides a useful analytical interpretation of production growth as a smooth polynomial function.
+This visualization helps assess how well the regression model follows the historical data.
 
-📊 Visualization
+---
 
-The project visualizes:
+## 📐 Model Evaluation
 
-Actual production data over time
+The model is evaluated using:
 
-Polynomial regression predictions
+### Mean Absolute Error (MAE)
+MAE = (1/n) * Σ |yᵢ − ŷᵢ|
 
-Comparison between observed and modeled trends
+mathematica
+Copy code
 
-This visual comparison helps assess model fit and trend behavior.
+### Root Mean Square Error (RMSE)
+RMSE = sqrt((1/n) * Σ (yᵢ − ŷᵢ)²)
 
-📐 Model Evaluation
+yaml
+Copy code
 
-The following error metrics are used to assess model performance:
+Lower values indicate better model performance.
 
-Mean Absolute Error (MAE)
+---
 
-𝑀
-𝐴
-𝐸
-=
-1
-𝑛
-∑
-𝑖
-=
-1
-𝑛
-∣
-𝑦
-𝑖
-−
-𝑦
-^
-𝑖
-∣
-MAE=
-n
-1
-	​
+## 🏭 Warehouse Capacity Planning
 
-i=1
-∑
-n
-	​
+### Problem Definition
+- **Maximum warehouse capacity:** 25,000 units
+- **Construction lead time:** 13 months
 
-∣y
-i
-	​
+### Approach
+1. Predict future production using the regression model
+2. Identify the month when predicted production exceeds capacity
+3. Subtract the construction lead time
+4. Convert the result into a calendar date
 
-−
-y
-^
-	​
+### Output
+The script outputs the **recommended month to start building a new warehouse** to avoid exceeding storage capacity.
 
-i
-	​
+---
 
-∣
+## 🛠️ Technologies Used
 
-Root Mean Square Error (RMSE)
+- Python
+- Pandas
+- NumPy
+- Matplotlib
+- Scikit-learn
 
-𝑅
-𝑀
-𝑆
-𝐸
-=
-1
-𝑛
-∑
-𝑖
-=
-1
-𝑛
-(
-𝑦
-𝑖
-−
-𝑦
-^
-𝑖
-)
-2
-RMSE=
-n
-1
-	​
+---
 
-i=1
-∑
-n
-	​
+## 📂 Project Structure
 
-(y
-i
-	​
-
-−
-y
-^
-	​
-
-i
-	​
-
-)
-2
-	​
-
-
-Lower MAE and RMSE values indicate that the polynomial model closely follows the historical production trend.
-
-🏭 Warehouse Capacity Planning
-Problem Statement
-
-Maximum warehouse capacity: 25,000 units
-
-Construction lead time: 13 months
-
-Approach
-
-Identify the month when predicted production exceeds warehouse capacity
-
-Subtract the construction lead time
-
-Convert the resulting month index into a calendar date
-
-Outcome
-
-The analysis outputs the latest month when warehouse construction must begin to prevent capacity overflow.
-
-🛠️ Technologies Used
-
-Python
-
-Pandas – data handling and time indexing
-
-NumPy – numerical computation
-
-Matplotlib – data visualization
-
-Scikit-learn – polynomial regression and evaluation metrics
-
-📂 Project Structure
 production-trend-analysis/
 │
 ├── production_trend_analysis.py
 ├── README.md
 └── requirements.txt
 
-▶️ How to Run the Project
-1️⃣ Install Dependencies
+yaml
+Copy code
+
+---
+
+## ▶️ How to Run the Project
+
+### 1️⃣ Install Dependencies
+```bash
 pip install pandas numpy matplotlib scikit-learn
-
 2️⃣ Run the Script
+bash
+Copy code
 python production_trend_analysis.py
-
-
 The script will:
 
 Train the polynomial regression model
 
-Plot production trends
+Plot actual vs predicted production
 
-Print MAE and RMSE
+Print MAE and RMSE values
 
-Output the recommended warehouse construction start date
+Output the warehouse construction start date
 
 ⚠️ Limitations
+Polynomial regression assumes smooth growth trends
 
-Polynomial regression assumes smooth long-term trends and may not capture sudden shocks
+Sudden shocks or seasonal effects are not modeled
 
-No seasonality or external economic factors are modeled
-
-Extrapolation far beyond the observed data range should be interpreted cautiously
+Long-term extrapolation should be interpreted cautiously
 
 🔮 Future Improvements
-
-Incorporate time series models (ARIMA, SARIMA, Prophet)
+Use time series models (ARIMA, SARIMA, Prophet)
 
 Add confidence intervals for predictions
 
-Perform model selection using cross-validation
+Perform model comparison and cross-validation
 
-Include seasonal and external variables
+Include seasonality and external variables
 
 👤 Author
-
 Owen Figo
 Production Trend Analysis Project
-
-
-📄 License
-
-This project is intended for educational and analytical purposes.
-Free to use and modify with appropriate attribution.
