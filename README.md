@@ -120,7 +120,6 @@ Lower values indicate better model performance.
 ### Output
 The script outputs the **recommended month to start building a new warehouse** to avoid exceeding storage capacity.
 
----
 
 ## 🛠️ Technologies Used
 
@@ -130,13 +129,5 @@ The script outputs the **recommended month to start building a new warehouse** t
 - Matplotlib
 - Scikit-learn
 
----
 
-## 📂 Project Structure
-
-production-trend-analysis/
-│
-├── production_trend_analysis.py
-├── README.md
-└── requirements.txt
 
